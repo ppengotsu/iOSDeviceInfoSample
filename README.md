@@ -1,0 +1,2 @@
+# iOSDeviceInfoSample
+iOSの端末情報を取得して、スクリーンショット保存する
