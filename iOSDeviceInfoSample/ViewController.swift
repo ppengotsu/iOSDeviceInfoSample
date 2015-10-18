@@ -39,6 +39,9 @@ class ViewController: UIViewController {
     */
     func renewDataForDisplay(){
         
+        //OSごとに色表示
+        renewBackgroundOSColor()
+        
         //OS世代
         osGenerationLabel!.text = "\(osGeneration())"
         
@@ -50,6 +53,32 @@ class ViewController: UIViewController {
         
         //スクリーンサイズ
         screenSizeLabel!.text = "ScreenSize:  " + screenSizeString()
+    }
+    
+    /**
+    OSバージョンごとの背景色にする
+    */
+    func renewBackgroundOSColor(){
+        let osVersion = osGeneration()
+        switch osVersion{
+            case "8":
+                self.view.backgroundColor = UIColor(red:0.0,green:0.5,blue:1.0,alpha:1.0)
+            break
+            
+            case "9":
+                self.view.backgroundColor = UIColor(red:0.9,green:0.0,blue:0.5,alpha:1.0)
+            break
+            
+            case "10":
+                self.view.backgroundColor = UIColor(red:0.8,green:0.8,blue:0.8,alpha:1.0)
+            break
+            
+            case "11":
+                self.view.backgroundColor = UIColor(red:0.2,green:0.5,blue:0.2,alpha:1.0)
+            break
+        default:
+            break
+        }
     }
     
     
@@ -111,10 +140,10 @@ class ViewController: UIViewController {
     :returns:
     */
     func deviceInfoString() -> String{
-        let systemName = UIDevice.currentDevice().localizedModel
+        let platform = platformString();
         let deviceVersion = UIDevice.currentDevice().systemVersion
         
-        return systemName + " (" + deviceVersion + ")"
+        return platform + " (" + deviceVersion + ")"
     }
     
     /**
@@ -140,8 +169,21 @@ class ViewController: UIViewController {
         return  "\(screenSize.width)x\(screenSize.height)"
     }
     
+    
+    /**
+    プラットフォーム名取得
+    
+    :returns:
+    */
+    func platformString() -> String{
+        var size: Int = 0
+        sysctlbyname("hw.machine", nil, &size, nil, 0)
+        var machine = [CChar](count: size, repeatedValue: 0)
+        sysctlbyname("hw.machine", &machine, &size, nil, 0)
+        return String.fromCString(machine)! // 例: iPad3,1
+    }
+    
     //MARK: - その他
-
 
 }
 
